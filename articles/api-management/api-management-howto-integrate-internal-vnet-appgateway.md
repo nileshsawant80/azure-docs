@@ -110,7 +110,7 @@ The following example shows how to create a Virtual Network using the resource m
 ### Step 1
 
 Assign the address range 10.0.0.0/24 to the subnet variable to be used for Application Gateway while creating a Virtual Network.
-
+appgatewaysubnet name should be strictly "GatewaySubnet"?
 ```powershell
 $appgatewaysubnet = New-AzureRmVirtualNetworkSubnetConfig -Name "apim01" -AddressPrefix "10.0.0.0/24"
 ```
@@ -214,7 +214,7 @@ $fipconfig01 = New-AzureRmApplicationGatewayFrontendIPConfig -Name "frontend1" -
 ### Step 4
 
 Configure the certificate for the Application Gateway, used to decrypt and re-encrypt the traffic passing through.
-
+Below script accept password in secure string. step fail if we password directly.
 ```powershell
 $cert = New-AzureRmApplicationGatewaySslCertificate -Name "cert01" -CertificateFile <full path to .pfx file> -Password <password for certificate file>
 ```
@@ -258,7 +258,7 @@ $apimPoolSetting = New-AzureRmApplicationGatewayBackendHttpSettings -Name "apimP
 ### Step 9
 
 Configure a back-end IP address pool named **apimbackend**  with the internal virtual IP address of the API Management service created above.
-
+The below script code assign public VIP address to the backend pool, backend health fail due to connection issue. It has to be private backend ip for internal APIM
 ```powershell
 $apimProxyBackendPool = New-AzureRmApplicationGatewayBackendAddressPool -Name "apimbackend" -BackendIPAddresses $apimService.StaticIPs[0]
 ```
